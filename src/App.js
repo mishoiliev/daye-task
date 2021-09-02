@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { Header } from "./components/header";
+import React, { useEffect, useState } from "react";
+import Loader from "react-loader-spinner";
+import { DataPage } from "./components/dataPage";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  const [data, setData] = useState("loading");
+
+  useEffect(() => {
+    //can be done with axios as well
+    fetch("https://front-end-test-bvhzjr6b6a-uc.a.run.app/")
+      .then((res) => res.json())
+      .then((jsonRes) => setData(jsonRes))
+      .catch((error) => alert(error));
+  }, []);
+
+  return data !== "loading" ? (
+    <div className="App flex-row bg-gray-100 min-h-full w-full absolute">
+      <Header />
+      <DataPage data={data} />
     </div>
+  ) : (
+    <Loader
+      type="Oval"
+      height={100}
+      width={100}
+      className="absolute inset-y-1/2 inset-x-1/2"
+    />
   );
 }
 
